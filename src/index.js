@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const packageJSON = require("../package.json");
 const config = require("../config.json")
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 
 const client = new Client({ 
   intents: [
@@ -12,17 +12,13 @@ const client = new Client({
   ] 
 });
 
-client.on('ready', () => {
-  console.log(`Bot up and running.`);
-});
-
-client.on('message', async (message) => {
+client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
 
   if (message.content.startsWith('!ban')) {
     const args = message.content.split(' ');
     if (args.length < 3) {
-      message.channel.send('Invalid command usage. Use `!ban userid reason`');
+      message.channel.send('Invalid command usage. Use `!ban userID reason`');
       return;
     }
 
@@ -48,6 +44,7 @@ client.on('message', async (message) => {
         message.channel.send('An error occurred while banning the user.');
       });
   } else if (message.content.startsWith('!mute')) {
+    // Parse the command
     const args = message.content.split(' ');
     if (args.length < 4) {
       message.channel.send('Invalid command usage. Use `!mute userid amountoftime reason`');
@@ -86,7 +83,7 @@ client.on('message', async (message) => {
       await member.roles.add(mutedRole);
       message.channel.send(`Muted ${member.user.tag} for ${muteDuration} with reason: ${reason}`);
 
-      // Unmute after the specified duration
+      // Automatically unmute after the specified duration
       setTimeout(async () => {
         await member.roles.remove(mutedRole);
         message.channel.send(`Unmuted ${member.user.tag} after ${muteDuration}`);
@@ -123,30 +120,48 @@ client.on('message', async (message) => {
       console.error(error);
       message.channel.send('An error occurred while kicking the user.');
     }
+  } else if (message.content.startsWith('!user')) {
+    // Parse the command
+    const args = message.content.split(' ');
+    if (args.length !== 2) {
+      message.channel.send('Invalid command usage. Use `!info userid`');
+      return;
+    }
+
+    // Get the user ID
+    const userId = args[1];
+
+    try {
+      // Fetch the user by ID
+      const user = await client.users.fetch(userId);
+
+      // Fetch the member in the server (if they are a member)
+      const member = message.guild.members.cache.get(userId);
+
+      if (!user) {
+        message.channel.send('User not found.');
+        return;
+      }
+
+      const embed = new Discord.EmbedBuilder()
+        .setTitle('User Information')
+        .setColor('#FF5000')
+        .setThumbnail(user.displayAvatarURL())
+        .addFields(
+          { name: 'User ID:', value: user.id},
+          { name: 'Username:', value: user.username},
+        )
+
+      message.channel.send({ embeds: [embed] });
+    } catch (error) {
+      console.error(error);
+      message.channel.send('An error occurred while fetching user information.');
+    }
   }
 });
 
-client.login(token);
+client.login(config.bot_token);
 
-// Function to get time in the format "10s", "10m", or "24h"
-function parseTime(input) {
-  const regex = /^(\d+)([smh])$/;
-  const matches = input.match(regex);
-
-  if (!matches) return null;
-
-  const value = parseInt(matches[1]);
-  const unit = matches[2];
-
-  if (unit === 's' && value <= 60) {
-    return value;
-  } else if (unit === 'm' && value <= 525600) {
-    return value * 60;
-  } else if (unit === 'h' && value <= 8760) {
-    return value * 3600;
-  } else if (unit === 'd' && value <= 365) {
-    return value;
-  } else
-    return null;
-  }
-}
+client.on('ready', () => {
+  console.log(`Bot up and running.`);
+});
