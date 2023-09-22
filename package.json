@@ -1,0 +1,27 @@
+{
+  "name": "papernodes",
+  "version": "1.0.0",
+  "description": "Moderation bot.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ephraimkreighbaum/papernodes-bot.git"
+  },
+  "keywords": [
+    "moderation",
+    "hosting",
+    "bot"
+  ],
+  "dependencies": {
+    "discord.js": "14.13.0"
+  },
+  "author": "Ephraim Kreighbaum",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ephraimkreighbaum/papernodes-bot/issues"
+  },
+  "homepage": "https://github.com/ephraimkreighbaum/papernodes-bot#readme"
+}
