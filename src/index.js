@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const packageJSON = require("../package.json");
 const config = require("../config.json")
+const tickets = require("./tickets/tickets.js")
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 
 const client = new Client({ 
