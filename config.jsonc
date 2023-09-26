@@ -1,0 +1,7 @@
+{
+    "token": "", // Your bot's Token
+    "prefix": "!", // Prefix to use with commands
+    "embedColor": "#FFA500" // Color of embedded messages the bot posts
+}
+
+
