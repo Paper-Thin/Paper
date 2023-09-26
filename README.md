@@ -3,4 +3,9 @@
   <h1>Paper</h1>
   <p>Another paper thin multi-purpose Discord Bot.</p>
   <a href="https://therealedk.xyz/paper">Website</a>
+
+
+  Paper is a combination of some of the best bots on the platform, including:
+
+  [Modmailbot by Dragory](https://github.com/Dragory/modmailbot)
 </div>
